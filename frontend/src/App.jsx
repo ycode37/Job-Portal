@@ -8,6 +8,9 @@ import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import { Navbar } from "./components/Navbar";
 import Footer from "./components/Footer";
+import { Toaster } from "react-hot-toast";
+import Myapplication from "./pages/user/Myapplication";
+import Profile from "./pages/user/Profile";
 
 const App = () => {
   const adminPath = useLocation().pathname.includes("admin");
@@ -25,8 +28,12 @@ const App = () => {
           <Route path="/About" element={<About />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Login" element={<Login />} />
+          {/* user routes */}
+          <Route path="/my-applications" element={<Myapplication />} />
+           <Route path="/profile" element={<Profile />} />
         </Routes>
         {adminPath || employerPath ? null : <Footer />}
+        <Toaster />
       </div>
     </>
   );

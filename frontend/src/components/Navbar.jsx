@@ -4,10 +4,12 @@ import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 
 import { AppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 export const Navbar = () => {
-  const { navigate, setquery } = useContext(AppContext);
+  const { navigate, setquery, user, setuser } = useContext(AppContext);
   const [open, setOpen] = useState(false);
+  const [isOpen, setisOpen] = useState(false);
   const [input, setinput] = useState("");
   const handleSearch = (e) => {
     if (e.key === "Enter" && input.trim() !== "") {
@@ -15,6 +17,11 @@ export const Navbar = () => {
       navigate("/all-jobs");
       setinput("");
     }
+  };
+  const logout = () => {
+    setuser(false);
+    navigate("/");
+    toast.success("Logged Out Successfully");
   };
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
@@ -42,12 +49,53 @@ export const Navbar = () => {
           </button>
         </div>
 
-        <button
-          onClick={() => navigate("/login")}
-          className="cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full"
-        >
-          Login
-        </button>
+        {user ? (
+          <div className="relative">
+            <div
+              className="relative inline-block"
+              onMouseEnter={() => setisOpen(true)}
+              onMouseLeave={() => setisOpen(false)}
+            >
+              <img
+                src={assets.user_profile}
+                alt=""
+                className="w-12 h-12 rounded-full cursor-pointer border border-gray-300"
+              />
+
+              {/* Dropdown Menu */}
+              {isOpen && (
+                <div className="absolute top-full right-0 mt-1 w-48 bg-white shadow-lg rounded-lg py-2 z-50 border border-gray-200">
+                  <p
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
+                    onClick={() => navigate("/my-applications")}
+                  >
+                    My Applications
+                  </p>
+                  <p
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
+                    onClick={() => navigate("/profile")}
+                  >
+                    Profile
+                  </p>
+                  <p
+                    className="px-4 py-2 text-red-300 cursor-pointer transition-colors"
+                    onClick={logout}
+                  >
+                    LogOut
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="cursor-pointer px-8 py-2 bg-indigo-500
+            hover:bg-indigo-600 transition text-white rounded-full"
+          >
+            Login
+          </button>
+        )}
       </div>
 
       <button

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 const Login = () => {
+  const { navigate, setuser } = useContext(AppContext);
   const [formdata, setformdata] = useState({
     email: "",
     password: "",
@@ -12,7 +14,8 @@ const Login = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formdata);
+    setuser(true);
+    navigate("/");
   };
   return (
     <div className="bg-white text-gray-500 max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">

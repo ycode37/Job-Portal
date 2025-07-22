@@ -1,7 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { categories } from "../assets/assets";
 import { jobs } from "../assets/assets";
+import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
@@ -13,6 +14,8 @@ const AppContextProvider = ({ children }) => {
   const [categoriesData, setcategoriesData] = useState([]);
   const [jobsData, setjobsData] = useState([]);
   const [query, setquery] = useState("");
+  const [isJobapplied, setisJobapplied] = useState(false);
+  const [savedJobs, setsavedJobs] = useState([]);
   const fetchCategories = () => {
     setcategoriesData(categories);
   };
@@ -23,6 +26,18 @@ const AppContextProvider = ({ children }) => {
   }, []);
   const fetchJobs = () => {
     setjobsData(jobs);
+  };
+  const savedJob = (job) => {
+    setsavedJobs((prev) => {
+      const exists = prev.find((item) => item._id === job._id);
+      if (exists) {
+        return prev;
+      } else {
+        toast.success("Job Saved Successfully");
+
+        return [...prev, job];
+      }
+    });
   };
   const value = {
     navigate,
@@ -38,6 +53,11 @@ const AppContextProvider = ({ children }) => {
     setjobsData,
     query,
     setquery,
+    isJobapplied,
+    setisJobapplied,
+    savedJobs,
+    setsavedJobs,
+    savedJob,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
